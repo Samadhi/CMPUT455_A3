@@ -45,6 +45,7 @@ class GtpConnection:
         self._debug_mode: bool = debug_mode
         self.go_engine = go_engine
         self.board: GoBoard = board
+        self.policy_policytype = "random"#default policy_policytype set to random
         self.commands: Dict[str, Callable[[List[str]], None]] = {
             "protocol_version": self.protocol_version_cmd,
             "quit": self.quit_cmd,
@@ -359,8 +360,7 @@ class GtpConnection:
     ==========================================================================
     """
     
-    def policy_policytype_cmd(self,args):
-        self.policy_policytype = "random"#default policy_policytype set to random
+    def policy_policytype_cmd(self,args:List[str]):
         self.random_policytype = random
         self.rulebased_policytype = rulebased
         if policy_policytype in["random","rulebased"]:
