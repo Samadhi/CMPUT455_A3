@@ -70,7 +70,7 @@ class GtpConnection:
             "gogui-analyze_commands": self.gogui_analyze_cmd,
             "timelimit": self.timelimit_cmd,
             "solve": self.solve_cmd,
-            "policy_policytype": self.policy_policytype_cmd
+            "policy": self.policy_policytype_cmd
         }
 
         # argmap is used for argument checking
@@ -364,7 +364,7 @@ class GtpConnection:
         self.policytype = args[1]
         print(self.policytype)
         self.rulebased_policytype = rulebased
-        if policy_policytype in["random","rulebased"]:
+        if policy_policytype in["random","rule_based"]:
             self.policy_policytype = policy_policytype
             print(policy_policytype)
         else:
