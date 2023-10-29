@@ -45,7 +45,7 @@ class GtpConnection:
         self._debug_mode: bool = debug_mode
         self.go_engine = go_engine
         self.board: GoBoard = board
-        self.policy_policytype = "random"#default policy_policytype set to random
+        self.policytype = "random"#default policy_policytype set to random
         self.commands: Dict[str, Callable[[List[str]], None]] = {
             "protocol_version": self.protocol_version_cmd,
             "quit": self.quit_cmd,
@@ -361,14 +361,16 @@ class GtpConnection:
     """
     
     def policy_policytype_cmd(self,args: List[str]):
-        self.random_policytype = random
+        self.policytype = args[1]
+        print(self.policytype)
         self.rulebased_policytype = rulebased
         if policy_policytype in["random","rulebased"]:
             self.policy_policytype = policy_policytype
             print(policy_policytype)
         else:
             print("unknown")
-    play_cmd(input("choose random policytype or rule based policytype: ".format(policy_policytype_cmd)))
+
+        #play_cmd(input("choose random policytype or rule based policytype: ".format(policy_policytype_cmd)))
         
 
     def genmove_cmd(self, args: List[str]) -> None:
