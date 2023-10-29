@@ -11,6 +11,7 @@ at the University of Edinburgh.
 import traceback
 import numpy as np
 import re
+import random
 from sys import stdin, stdout, stderr
 from typing import Any, Callable, Dict, List, Tuple
 
@@ -44,6 +45,7 @@ class GtpConnection:
         self._debug_mode: bool = debug_mode
         self.go_engine = go_engine
         self.board: GoBoard = board
+        self.policytype = "random"#default policy_policytype set to random
         self.commands: Dict[str, Callable[[List[str]], None]] = {
             "protocol_version": self.protocol_version_cmd,
             "quit": self.quit_cmd,
@@ -67,7 +69,8 @@ class GtpConnection:
             "gogui-rules_board": self.gogui_rules_board_cmd,
             "gogui-analyze_commands": self.gogui_analyze_cmd,
             "timelimit": self.timelimit_cmd,
-            "solve": self.solve_cmd
+            "solve": self.solve_cmd,
+            "policy": self.policy_policytype_cmd
         }
 
         # argmap is used for argument checking
@@ -318,7 +321,7 @@ class GtpConnection:
         sorted_moves = " ".join(sorted(gtp_moves))
         self.respond(sorted_moves)
 
-    def play_cmd(self, args: List[str]) -> None:
+    def play_cmd(self, args: List[str]):
         """ We already implemented this function for Assignment 2 """
         try:
             board_color = args[0].lower()
@@ -356,6 +359,16 @@ class GtpConnection:
     Assignment 2 - game-specific commands you have to implement or modify
     ==========================================================================
     """
+    
+    def policy_policytype_cmd(self,args: List[str]):
+        p_type = ['random', 'rule_based']
+    
+        if args[0] in p_type:
+            self.policytype = args[0]
+            self.respond()
+        else:
+            self.respond("Usage: policy {random, rule_based}")
+        
 
     def genmove_cmd(self, args: List[str]) -> None:
         """ 
