@@ -365,6 +365,7 @@ class GtpConnection:
     
         if args[0] in p_type:
             self.policytype = args[0]
+            self.respond()
         else:
             self.respond("Usage: policy {random, rule_based}")
         
