@@ -321,7 +321,7 @@ class GtpConnection:
         sorted_moves = " ".join(sorted(gtp_moves))
         self.respond(sorted_moves)
 
-    def play_cmd(self, args: List[str]) -> None:
+    def play_cmd(self, args: List[str]):
         """ We already implemented this function for Assignment 2 """
         try:
             board_color = args[0].lower()
