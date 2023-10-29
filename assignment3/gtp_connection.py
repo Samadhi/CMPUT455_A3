@@ -364,8 +364,9 @@ class GtpConnection:
 
         if input != 'random' or 'rule_based':
             self.respond("only 2 options: random or rule_based")
-        self.policytype = args[0]
-        print(self.policytype)
+        else:
+            self.policytype = args[0]
+            print(self.policytype)
         
 
     def genmove_cmd(self, args: List[str]) -> None:
