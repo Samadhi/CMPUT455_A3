@@ -361,6 +361,7 @@ class GtpConnection:
         """ 
         Modify this function for Assignment 2.
         """
+        
         board_color = args[0].lower()
         color = color_to_int(board_color)
         result1 = self.board.detect_five_in_a_row()

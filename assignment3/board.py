@@ -12,6 +12,7 @@ The board uses a 1-dimensional representation with padding
 """
 
 import numpy as np
+import random
 from typing import List, Tuple
 
 from board_base import (
@@ -194,8 +195,18 @@ class GoBoard(object):
         return can_play_move
 
     def end_of_game(self) -> bool:
-        return self.last_move == PASS \
-           and self.last2_move == PASS
+        # return self.last_move == PASS \
+        #    and self.last2_move == PASS
+        result1 = self.detect_five_in_a_row()
+
+        if self.get_captures(BLACK) >= 10 or result1 == BLACK:
+            return True
+        elif self.get_captures(WHITE) >= 10 or result1 == WHITE:
+            return True
+        elif self.get_empty_points().size == 0:
+            return True
+        else:
+            return False
            
     def get_empty_points(self) -> np.ndarray:
         """
@@ -393,3 +404,22 @@ class GoBoard(object):
             if counter == 5 and prev != EMPTY:
                 return prev
         return EMPTY
+    
+    def simulateRandom(self): 
+        allMoves = self.get_empty_points()
+        random.shuffle(allMoves)
+        i = 0
+        while not self.end_of_game():
+            self.play_move(allMoves[i],opponent(self.current_player))
+            i+= 1
+            
+        result1 = self.detect_five_in_a_row()
+
+        if self.get_captures(BLACK) >= 10 or result1 == BLACK:
+            return BLACK
+        elif self.get_captures(WHITE) >= 10 or result1 == WHITE:
+            return WHITE
+        elif self.get_empty_points().size == 0:
+            return EMPTY 
+              
+        
