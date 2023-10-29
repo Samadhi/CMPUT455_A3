@@ -31,7 +31,7 @@ from board_util import GoBoardUtil
 from engine import GoEngine
 
 class GtpConnection:
-    def __init__(self, go_engine: GoEngine, board: GoBoard, debug_mode: bool = False) -> None:
+    def __init__(self, go_engine: GoEngine, board: GoBoard, debug_mode: bool = False, policy_policytype) -> None:
         """
         Manage a GTP connection for a Go-playing engine
 
@@ -360,7 +360,7 @@ class GtpConnection:
     ==========================================================================
     """
     
-    def policy_policytype_cmd(self,args:List[str]):
+    def policy_policytype_cmd(self,random_policytype:random,rulebased_policytype:rulebased):
         self.random_policytype = random
         self.rulebased_policytype = rulebased
         if policy_policytype in["random","rulebased"]:
