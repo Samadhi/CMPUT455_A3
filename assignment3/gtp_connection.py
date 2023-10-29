@@ -368,7 +368,7 @@ class GtpConnection:
             print(policy_policytype)
         else:
             print("unknown")
-    play_cmd(input("choose random policytype or rule based policytype: ".format(policy_policytype_cmd))
+    play_cmd(input("choose random policytype or rule based policytype: ".format(policy_policytype_cmd)))
         
 
     def genmove_cmd(self, args: List[str]) -> None:
