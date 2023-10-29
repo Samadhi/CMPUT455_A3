@@ -365,9 +365,8 @@ class GtpConnection:
     
         if args[0] in p_type:
             self.policytype = args[0]
-            print(self.policytype)
         else:
-            self.respond("nope")
+            self.respond("Usage: policy {random, rule_based}")
         
 
     def genmove_cmd(self, args: List[str]) -> None:
