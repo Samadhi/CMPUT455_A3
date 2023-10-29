@@ -361,8 +361,9 @@ class GtpConnection:
     """
     
     def policy_policytype_cmd(self,args: List[str]):
+        p_type = ['random', 'rule_based']
 
-        if policytype == 'random' or 'rule_based':
+        if input not in p_type:
             self.policytype = args[0]
             print(self.policytype)
         else:
