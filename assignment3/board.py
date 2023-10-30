@@ -405,8 +405,11 @@ class GoBoard(object):
                 return prev
         return EMPTY
     
-    def simulateRandom(self): 
+    def simulateMoves(self): 
         allMoves = self.get_empty_points()
+
+        #current implementation is random, will need to make the different kinds
+
         random.shuffle(allMoves)
         i = 0
         while not self.end_of_game():
