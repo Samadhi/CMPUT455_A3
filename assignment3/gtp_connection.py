@@ -11,6 +11,7 @@ at the University of Edinburgh.
 import traceback
 import numpy as np
 import re
+import random
 from sys import stdin, stdout, stderr
 from typing import Any, Callable, Dict, List, Tuple
 
@@ -28,6 +29,7 @@ from board_base import (
 from board import GoBoard
 from board_util import GoBoardUtil
 from engine import GoEngine
+#from Ninuki import SimulationPlayer
 
 class GtpConnection:
     def __init__(self, go_engine: GoEngine, board: GoBoard, debug_mode: bool = False) -> None:
@@ -41,9 +43,11 @@ class GtpConnection:
         board: 
             Represents the current board state.
         """
+        self.simulation = None
         self._debug_mode: bool = debug_mode
         self.go_engine = go_engine
         self.board: GoBoard = board
+        self.policytype = "random"#default policy_policytype set to random
         self.commands: Dict[str, Callable[[List[str]], None]] = {
             "protocol_version": self.protocol_version_cmd,
             "quit": self.quit_cmd,
@@ -67,7 +71,9 @@ class GtpConnection:
             "gogui-rules_board": self.gogui_rules_board_cmd,
             "gogui-analyze_commands": self.gogui_analyze_cmd,
             "timelimit": self.timelimit_cmd,
-            "solve": self.solve_cmd
+            "solve": self.solve_cmd,
+            "policy": self.policy_policytype_cmd, 
+            "policy_moves": self.policy_moves_cmd
         }
 
         # argmap is used for argument checking
@@ -88,7 +94,9 @@ class GtpConnection:
     def flush(self) -> None:
         stdout.flush()
 
-    def start_connection(self) -> None:
+    def start_connection(self, simulation = None) -> None:
+        if simulation != None:
+            self.simulation = simulation
         """
         Start a GTP connection. 
         This function continuously monitors standard input for commands.
@@ -318,7 +326,7 @@ class GtpConnection:
         sorted_moves = " ".join(sorted(gtp_moves))
         self.respond(sorted_moves)
 
-    def play_cmd(self, args: List[str]) -> None:
+    def play_cmd(self, args: List[str]):
         """ We already implemented this function for Assignment 2 """
         try:
             board_color = args[0].lower()
@@ -356,11 +364,41 @@ class GtpConnection:
     Assignment 2 - game-specific commands you have to implement or modify
     ==========================================================================
     """
+    
+    def policy_policytype_cmd(self,args: List[str]):
+        p_type = ['random', 'rule_based']
+    
+        if args[0] in p_type:
+            self.policytype = args[0]
+            self.respond()
+        else:
+            self.respond("Usage: policy {random, rule_based}")
+
+    def policy_moves_cmd(self, args: List[str]):
+        moves_list = None
+        if (self.policytype == "random"):
+            legal_moves = self.board.get_empty_points()
+            gtp_moves: List[str] = []
+            for move in legal_moves:
+                coords: Tuple[int, int] = point_to_coord(move, self.board.size)
+                gtp_moves.append((format_point(coords)).lower())
+            sorted_moves = " ".join(sorted(gtp_moves))
+            self.respond("Random "+ sorted_moves)
+        else:
+            self.respond("Not yet implemented for rules")
+            #self.simulation.genmove(self.board)
+            # if Win:
+            # elif BlockWin:
+            # ...
+            # else: Random
+
+        #print(moves_list)        
 
     def genmove_cmd(self, args: List[str]) -> None:
         """ 
         Modify this function for Assignment 2.
         """
+        
         board_color = args[0].lower()
         color = color_to_int(board_color)
         result1 = self.board.detect_five_in_a_row()
