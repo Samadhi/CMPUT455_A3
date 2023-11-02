@@ -368,6 +368,13 @@ class GoBoard(object):
         if self.last2_move != NO_POINT and self.last2_move != PASS:
             board_moves.append(self.last2_move)
         return board_moves
+    
+    # def BlockWin(self):
+        
+
+    def Random(self):
+        legal_moves = self.board.get_empty_points()
+        return legal_moves
 
     def detect_five_in_a_row(self) -> GO_COLOR:
         """

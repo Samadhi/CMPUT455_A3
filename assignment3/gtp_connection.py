@@ -14,6 +14,7 @@ import re
 import random
 from sys import stdin, stdout, stderr
 from typing import Any, Callable, Dict, List, Tuple
+import copy
 
 from board_base import (
     BLACK,
@@ -377,28 +378,49 @@ class GtpConnection:
     def policy_moves_cmd(self, args: List[str]):
         moves_list = None
         if (self.policytype == "random"):
-            legal_moves = self.board.get_empty_points()
-            gtp_moves: List[str] = []
-            for move in legal_moves:
-                coords: Tuple[int, int] = point_to_coord(move, self.board.size)
-                gtp_moves.append((format_point(coords)).lower())
-            sorted_moves = " ".join(sorted(gtp_moves))
-            self.respond("Random "+ sorted_moves)
+            moves = self.board.Random()
+            formated_moves = self.format_moves(moves)
+            self.respond("Random "+formated_moves)
         else:
             self.respond("Not yet implemented for rules")
-            #self.simulation.genmove(self.board)
-            # if Win:
-            # elif BlockWin:
-            # ...
-            # else: Random
+            rlist = self.rule_based()
+            print("{} {}".format(rlist[0], rlist[1]))
 
-        #print(moves_list)        
+    def format_moves(self, moves):
+        gtp_moves: List[str] = []
+        for move in moves:
+            coords: Tuple[int, int] = point_to_coord(move, self.board.size)
+            gtp_moves.append((format_point(coords)).lower())
+        sorted_moves = " ".join(sorted(gtp_moves))
+        return sorted_moves
+
+    def rule_based(self):
+        board_copy = copy.deepcopy(self.board)
+        rlist = self.board.Win(board_copy)
+        if len(rlist) != 0:
+            self.format_moves(self, rlist)
+            return ["Win",rlist]
+        # rlist = self.board.BlockWin(board_copy)
+        # if len(rlist) != 0:
+        #     self.format_moves(self, rlist)
+        #     return ["BlockWin",rlist]
+        # rlist = self.board.OpenFour()
+        # if len(rlist) != 0:
+        #     self.format_moves(self, rlist)
+        #     return ["OpenFour",rlist]
+        # rlist = self.board.Capture()
+        # if len(rlist) != 0:
+        #     self.format_moves(self, rlist)
+        #     return ["Capture",rlist]
+        # rlist = self.board.Random()
+        # if len(rlist) != 0:
+        #     self.format_moves(self, rlist)
+        #     return ["Random",rlist]
 
     def genmove_cmd(self, args: List[str]) -> None:
         """ 
         Modify this function for Assignment 2.
         """
-        
         board_color = args[0].lower()
         color = color_to_int(board_color)
         result1 = self.board.detect_five_in_a_row()
@@ -418,14 +440,6 @@ class GtpConnection:
         move_coord = point_to_coord(move, self.board.size)
         move_as_string = format_point(move_coord)
         self.play_cmd([board_color, move_as_string, 'print_move'])
-    
-    def timelimit_cmd(self, args: List[str]) -> None:
-        """ Implement this function for Assignment 2 """
-        pass
-
-    def solve_cmd(self, args: List[str]) -> None:
-        """ Implement this function for Assignment 2 """
-        pass
 
     """
     ==========================================================================
