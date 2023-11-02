@@ -400,6 +400,8 @@ class GtpConnection:
         if len(rlist) != 0:
             self.format_moves(self, rlist)
             return ["Win",rlist]
+        
+        
         # rlist = self.board.BlockWin(board_copy)
         # if len(rlist) != 0:
         #     self.format_moves(self, rlist)
