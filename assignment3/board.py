@@ -368,6 +368,63 @@ class GoBoard(object):
         if self.last2_move != NO_POINT and self.last2_move != PASS:
             board_moves.append(self.last2_move)
         return board_moves
+    
+    def Win(self):
+        winning_moves = []
+        legal_moves = self.get_empty_points()
+        player_color = self.current_player
+
+        for move in legal_moves:    
+            # check for 5 in a row
+            self.play_move(move, player_color)
+            color = self.detect_five_in_a_row()
+            if color == player_color:
+                winning_moves.append(move)
+
+            # check captures
+            if player_color == WHITE and self.white_captures >= 10:
+                    winning_moves.append(move)
+                    self.black_captures -= 2
+            if player_color == BLACK and self.black_captures >= 10:
+                    winning_moves.append(move)
+                    self.white_captures -= 2
+
+            # reset points filled back to empty
+            self.board[move] = EMPTY
+
+        return winning_moves
+        
+    def BlockWin(self):
+        winPoints = []
+        empty_points = self.get_empty_points()
+
+        # check if there is a five in a row
+        for point in empty_points:
+            if self.current_player == WHITE:
+                previous_captures = self.black_captures
+            else:
+                previous_captures = self.white_captures
+            
+            self.play_move(point, opponent(self.current_player))
+            color = self.detect_five_in_a_row()
+
+            if color == opponent(self.current_player):
+                winPoints.append(point)
+            
+            if previous_captures == 8:
+                if self.current_player == WHITE and previous_captures < self.black_captures:
+                    winPoints.append(point)
+                    self.black_captures -= 2
+                elif self.current_player == BLACK and previous_captures < self.white_captures:
+                    winPoints.append(point)
+                    self.white_captures -= 2
+            self.board[point] = EMPTY
+
+        return winPoints
+        
+    def Random(self):
+        legal_moves = self.get_empty_points()
+        return legal_moves
 
     def detect_five_in_a_row(self) -> GO_COLOR:
         """

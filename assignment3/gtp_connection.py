@@ -14,6 +14,7 @@ import re
 import random
 from sys import stdin, stdout, stderr
 from typing import Any, Callable, Dict, List, Tuple
+import copy
 
 from board_base import (
     BLACK,
@@ -70,8 +71,6 @@ class GtpConnection:
             "gogui-rules_side_to_move": self.gogui_rules_side_to_move_cmd,
             "gogui-rules_board": self.gogui_rules_board_cmd,
             "gogui-analyze_commands": self.gogui_analyze_cmd,
-            "timelimit": self.timelimit_cmd,
-            "solve": self.solve_cmd,
             "policy": self.policy_policytype_cmd, 
             "policy_moves": self.policy_moves_cmd
         }
@@ -377,28 +376,60 @@ class GtpConnection:
     def policy_moves_cmd(self, args: List[str]):
         moves_list = None
         if (self.policytype == "random"):
-            legal_moves = self.board.get_empty_points()
-            gtp_moves: List[str] = []
-            for move in legal_moves:
-                coords: Tuple[int, int] = point_to_coord(move, self.board.size)
-                gtp_moves.append((format_point(coords)).lower())
-            sorted_moves = " ".join(sorted(gtp_moves))
-            self.respond("Random "+ sorted_moves)
+            moves = self.board.Random()
+            formated_moves = self.format_moves(moves)
+            self.respond("Random "+formated_moves)
         else:
-            self.respond("Not yet implemented for rules")
-            #self.simulation.genmove(self.board)
-            # if Win:
-            # elif BlockWin:
-            # ...
-            # else: Random
+            rlist = self.rule_based()
+            self.respond("{} {}".format(rlist[0], rlist[1]))
 
-        #print(moves_list)        
+    def format_moves(self, moves):
+        gtp_moves: List[str] = []
+        for move in moves:
+            coords: Tuple[int, int] = point_to_coord(move, self.board.size)
+            gtp_moves.append((format_point(coords)).lower())
+        sorted_moves = " ".join(sorted(gtp_moves))
+        #print(sorted_moves)
+        return sorted_moves
+
+    def rule_based(self):
+        # board_copy = copy.deepcopy(self.board)
+        # rlist = board_copy.Win()
+        # if len(rlist) != 0:
+        #     self.format_moves(rlist)
+        #     return ["Win",rlist]
+        board_copy = copy.deepcopy(self.board)
+        #checks for wins
+        rlist = board_copy.Win()
+        if len(rlist) != 0:
+            moves = self.format_moves(rlist)
+            return ["Win",moves] 
+        board_copy = copy.deepcopy(self.board)
+        # checks for blocks wins
+        rlist = board_copy.BlockWin()
+        if len(rlist) != 0:
+            moves = self.format_moves(rlist)
+            return ["BlockWin",moves]
+        # board_copy = copy.deepcopy(self.board)
+        # rlist = self.board.OpenFour()
+        # if len(rlist) != 0:
+        #     self.format_moves(rlist)
+        #     return ["OpenFour",rlist]
+        # board_copy = copy.deepcopy(self.board)
+        # rlist = self.board.Capture()
+        # if len(rlist) != 0:
+        #     self.format_moves(rlist)
+        #     return ["Capture",rlist]
+        # board_copy = copy.deepcopy(self.board)
+        # rlist = self.board.Random()
+        # if len(rlist) != 0:
+        #     self.format_moves(rlist)
+        #     return ["Random",rlist]
 
     def genmove_cmd(self, args: List[str]) -> None:
         """ 
         Modify this function for Assignment 2.
         """
-        
         board_color = args[0].lower()
         color = color_to_int(board_color)
         result1 = self.board.detect_five_in_a_row()
@@ -418,14 +449,6 @@ class GtpConnection:
         move_coord = point_to_coord(move, self.board.size)
         move_as_string = format_point(move_coord)
         self.play_cmd([board_color, move_as_string, 'print_move'])
-    
-    def timelimit_cmd(self, args: List[str]) -> None:
-        """ Implement this function for Assignment 2 """
-        pass
-
-    def solve_cmd(self, args: List[str]) -> None:
-        """ Implement this function for Assignment 2 """
-        pass
 
     """
     ==========================================================================
