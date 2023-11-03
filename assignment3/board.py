@@ -369,6 +369,32 @@ class GoBoard(object):
             board_moves.append(self.last2_move)
         return board_moves
     
+    def Win(self):
+        winning_moves = []
+        legal_moves = self.get_empty_points()
+        player_color = self.current_player
+
+        for move in legal_moves:    
+            # check for 5 in a row
+            self.play_move(move, player_color)
+            color = self.detect_five_in_a_row()
+            if color == player_color:
+                winning_moves.append(move)
+
+            # check captures
+            if player_color == WHITE and self.white_captures >= 10:
+                    winning_moves.append(move)
+                    self.black_captures -= 2
+            if player_color == BLACK and self.black_captures >= 10:
+                    winning_moves.append(move)
+                    self.white_captures -= 2
+
+            # reset points filled back to empty
+            self.board[move] = EMPTY
+
+        return winning_moves
+
+    
     # def BlockWin(self):
         
 

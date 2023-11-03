@@ -71,8 +71,8 @@ class GtpConnection:
             "gogui-rules_side_to_move": self.gogui_rules_side_to_move_cmd,
             "gogui-rules_board": self.gogui_rules_board_cmd,
             "gogui-analyze_commands": self.gogui_analyze_cmd,
-            "timelimit": self.timelimit_cmd,
-            "solve": self.solve_cmd,
+            #"timelimit": self.timelimit_cmd,
+            #"solve": self.solve_cmd,
             "policy": self.policy_policytype_cmd, 
             "policy_moves": self.policy_moves_cmd
         }
@@ -382,9 +382,10 @@ class GtpConnection:
             formated_moves = self.format_moves(moves)
             self.respond("Random "+formated_moves)
         else:
-            self.respond("Not yet implemented for rules")
+            #self.respond("Not yet implemented for rules")
             rlist = self.rule_based()
-            print("{} {}".format(rlist[0], rlist[1]))
+            #print(rlist)
+            self.respond("{} {}".format(rlist[0], rlist[1]))
 
     def format_moves(self, moves):
         gtp_moves: List[str] = []
@@ -392,16 +393,19 @@ class GtpConnection:
             coords: Tuple[int, int] = point_to_coord(move, self.board.size)
             gtp_moves.append((format_point(coords)).lower())
         sorted_moves = " ".join(sorted(gtp_moves))
+        #print(sorted_moves)
         return sorted_moves
 
     def rule_based(self):
         board_copy = copy.deepcopy(self.board)
-        rlist = self.board.Win(board_copy)
+        rlist = board_copy.Win()
         if len(rlist) != 0:
-            self.format_moves(self, rlist)
-            return ["Win",rlist]
+            #self.format_moves(self, rlist)
+            moves = self.format_moves(rlist)
+            return ["Win",moves]
+            #self.respond("Win {}".format(rlist))
         
-        
+
         # rlist = self.board.BlockWin(board_copy)
         # if len(rlist) != 0:
         #     self.format_moves(self, rlist)
