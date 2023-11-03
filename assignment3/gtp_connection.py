@@ -71,8 +71,6 @@ class GtpConnection:
             "gogui-rules_side_to_move": self.gogui_rules_side_to_move_cmd,
             "gogui-rules_board": self.gogui_rules_board_cmd,
             "gogui-analyze_commands": self.gogui_analyze_cmd,
-            "timelimit": self.timelimit_cmd,
-            "solve": self.solve_cmd,
             "policy": self.policy_policytype_cmd, 
             "policy_moves": self.policy_moves_cmd
         }
@@ -382,7 +380,6 @@ class GtpConnection:
             formated_moves = self.format_moves(moves)
             self.respond("Random "+formated_moves)
         else:
-            self.respond("Not yet implemented for rules")
             rlist = self.rule_based()
             print("{} {}".format(rlist[0], rlist[1]))
 
@@ -395,26 +392,30 @@ class GtpConnection:
         return sorted_moves
 
     def rule_based(self):
-        board_copy = copy.deepcopy(self.board)
-        rlist = self.board.Win(board_copy)
-        if len(rlist) != 0:
-            self.format_moves(self, rlist)
-            return ["Win",rlist]
-        # rlist = self.board.BlockWin(board_copy)
+        # board_copy = copy.deepcopy(self.board)
+        # rlist = board_copy.Win()
         # if len(rlist) != 0:
-        #     self.format_moves(self, rlist)
-        #     return ["BlockWin",rlist]
+        #     self.format_moves(rlist)
+        #     return ["Win",rlist]
+        board_copy = copy.deepcopy(self.board)
+        rlist = board_copy.BlockWin()
+        if len(rlist) != 0:
+            moves = self.format_moves(rlist)
+            return ["BlockWin",moves]
+        # board_copy = copy.deepcopy(self.board)
         # rlist = self.board.OpenFour()
         # if len(rlist) != 0:
-        #     self.format_moves(self, rlist)
+        #     self.format_moves(rlist)
         #     return ["OpenFour",rlist]
+        # board_copy = copy.deepcopy(self.board)
         # rlist = self.board.Capture()
         # if len(rlist) != 0:
-        #     self.format_moves(self, rlist)
+        #     self.format_moves(rlist)
         #     return ["Capture",rlist]
+        # board_copy = copy.deepcopy(self.board)
         # rlist = self.board.Random()
         # if len(rlist) != 0:
-        #     self.format_moves(self, rlist)
+        #     self.format_moves(rlist)
         #     return ["Random",rlist]
 
     def genmove_cmd(self, args: List[str]) -> None:
