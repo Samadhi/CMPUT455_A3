@@ -427,8 +427,13 @@ class GoBoard(object):
         captured_moves = []
         legal_moves = self.get_empty_points()#all the empty points are legal moves
         player_color = self.current_player
-
+        
         for move in legal_moves:
+            self.play_move(move, player_color)
+            color = self.detect_five_in_a_row()
+            if color == player_color:
+                winning_moves.append(move)
+ 
             self.play_move(move, player_color)
             if player_color == WHITE and self.white_captures >= 2:
                 captured_moves.append(move)
