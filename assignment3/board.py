@@ -421,21 +421,35 @@ class GoBoard(object):
             self.board[point] = EMPTY
 
         return winPoints
+
+
     def Capture (self):
         captured_moves = []
         legal_moves = self.get_empty_points()#all the empty points are legal moves
         player_color = self.current_player
-
+        opponent_color = WHITE if player_color == BLACK else BLACK 
+        
         for move in legal_moves:
             self.play_move(move, player_color)
-            if player_color == WHITE and self.white_captures == 2:
-                    captured_moves.append(move)
-                    self.white_captures += 2
-            if player_color == BLACK and self.black_captures == 2:
-                    captured_moves.append(move)
-                    self.black_captures += 2
-            self.board[move] = EMPTY
+            if self.board[move] == opponent_color: 
+                captured_moves.append(move)
+            self.board[move] = EMPTY  # Restore the board to its original state
+
         return captured_moves
+
+        # for move in legal_moves:
+        #     self.play_move(move, player_color)
+        #     if player_color == WHITE and self.white_captures >= 2:
+        #             captured_moves.append(move)
+        #             self.white_captures += 2
+        #     if player_color == BLACK and self.black_captures >= 2:
+        #             captured_moves.append(move)
+        #             self.black_captures += 2
+        #     self.board[move] = EMPTY
+        # return captured_moves
+
+        
+
 
 
     def Random(self):
