@@ -393,11 +393,11 @@ class GtpConnection:
         return sorted_moves
 
     def rule_based(self):
-        # board_copy = copy.deepcopy(self.board)
-        # rlist = board_copy.Win()
-        # if len(rlist) != 0:
-        #     self.format_moves(rlist)
-        #     return ["Win",rlist]
+        board_copy = copy.deepcopy(self.board)
+        rlist = board_copy.Win()
+        if len(rlist) != 0:
+            self.format_moves(rlist)
+            return ["Win",rlist]
         board_copy = copy.deepcopy(self.board)
         #checks for wins
         rlist = board_copy.Win()
@@ -415,7 +415,8 @@ class GtpConnection:
         # if len(rlist) != 0:
         #     self.format_moves(rlist)
         #     return ["OpenFour",rlist]
-        # board_copy = copy.deepcopy(self.board)
+        board_copy = copy.deepcopy(self.board)
+        #checks for captures
         rlist = self.board.Capture()
         if len(rlist) != 0:
             moves = self.format_moves(rlist)
