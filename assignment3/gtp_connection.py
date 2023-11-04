@@ -418,7 +418,7 @@ class GtpConnection:
         # board_copy = copy.deepcopy(self.board)
         rlist = self.board.Capture()
         if len(rlist) != 0:
-            self.format_moves(rlist)
+            moves = self.format_moves(rlist)
             return ["Capture",rlist]
         board_copy = copy.deepcopy(self.board)
         # rlist = self.board.Random()
