@@ -423,6 +423,7 @@ class GoBoard(object):
         return winPoints
 
 
+<<<<<<< Updated upstream
     def Capture (self):
         captured_moves = []
         legal_moves = self.get_empty_points()#all the empty points are legal moves
@@ -441,6 +442,7 @@ class GoBoard(object):
             if player_color == BLACK and self.black_captures == 2:
                 captured_moves.append(move)
                 self.black_captures == 2
+
             self.board[move] = EMPTY #resets the board 
         return captured_moves
 
