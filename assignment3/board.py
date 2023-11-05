@@ -423,44 +423,26 @@ class GoBoard(object):
         return winPoints
 
 
-    def Capture (self, point: GO_POINT, color: GO_COLOR) -> bool:
+    def Capture (self):
         captured_moves = []
         legal_moves = self.get_empty_points()#all the empty points are legal moves
         player_color = self.current_player
-        if self.board[point] != EMPTY:
-            return False
-        self.board[point] = color
-        self.current_player = opponent(color)
-        self.last2_move = self.last_move
-        self.last_move = point
-        O = opponent(color)
-        offsets = [1, -1, self.NS, -self.NS, self.NS+1, -(self.NS+1), self.NS-1, -self.NS+1]
-        for offset in offsets:
-            if self.board[point+offset] == O and self.board[point+(offset*2)] == O and self.board[point+(offset*3)] == color:
-                self.board[point+offset] = EMPTY
-                self.board[point+(offset*2)] = EMPTY
-                if color == BLACK:
-                    self.black_captures += 2
-                else:
-                    self.white_captures += 2
-        return True
-        return captured_moves
         
-        # for move in legal_moves:
-        #     self.play_move(move, player_color)
-        #     color = self.detect_two_in_a_row()
-        #     if color == player_color:
-        #         captured_moves.append(move)
+        for move in legal_moves:
+            self.play_move(move, player_color)
+            color = self.detect_two_in_a_row()
+            if color == player_color:
+                captured_moves.append(move)
  
             #self.play_move(move, player_color)
-            # if player_color == WHITE and self.white_captures == 2:
-            #         captured_moves.append(move)
-            #         self.white_captures -= 2
-            # if player_color == BLACK and self.black_captures == 2:
-            #         captured_moves.append(move)
-            #         self.black_captures -= 2
-                #self.board[move] = EMPTY #resets the board 
-           #return captured_moves
+            if player_color == WHITE and self.white_captures == 2:
+                captured_moves.append(move)
+                self.white_captures == 2
+            if player_color == BLACK and self.black_captures == 2:
+                captured_moves.append(move)
+                self.black_captures == 2
+            self.board[move] = EMPTY #resets the board 
+        return captured_moves
 
     def Random(self):
         legal_moves = self.get_empty_points()
