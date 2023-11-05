@@ -430,7 +430,7 @@ class GoBoard(object):
         
         for move in legal_moves:
             self.play_move(move, player_color)
-            color = self.detect_five_in_a_row()
+            color = self.detect_two_in_a_row()
             if color == player_color:
                 winning_moves.append(move)
  
@@ -484,6 +484,42 @@ class GoBoard(object):
             if counter == 5 and prev != EMPTY:
                 return prev
         return EMPTY
+
+    def detect_two_in_a_row(self) -> GO_COLOR:
+        """
+        Returns BLACK or WHITE if any five in a row is detected for the color
+        EMPTY otherwise.
+        """
+        for r in self.rows:
+            result = self.has_two_in_list(r)
+            if result != EMPTY:
+                return result
+        for c in self.cols:
+            result = self.has_two_in_list(c)
+            if result != EMPTY:
+                return result
+        for d in self.diags:
+            result = self.has_two_in_list(d)
+            if result != EMPTY:
+                return result
+        return EMPTY
+
+    def has_two_in_list(self, list) -> GO_COLOR:
+        """
+        Returns BLACK or WHITE if any 2 in a rows exist in the list.
+        EMPTY otherwise.
+        """
+        prev = BORDER
+        counter = 1
+        for stone in list:
+            if self.get_color(stone) == prev:
+                counter += 1
+            else:
+                counter = 1
+                prev = self.get_color(stone)
+            if counter == 2 and prev != EMPTY:
+                return prev
+        return EMPTY   
     
     def simulateMoves(self): 
         allMoves = self.get_empty_points()
