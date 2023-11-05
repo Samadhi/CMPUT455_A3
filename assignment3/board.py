@@ -433,16 +433,26 @@ class GoBoard(object):
             color = self.detect_two_in_a_row()
             if color == player_color:
                 captured_moves.append(move)
+            
+            offsets = [1, -1, self.NS, -self.NS, self.NS+1, -(self.NS+1), self.NS-1, -self.NS+1]
+            for offset in offsets:
+                if self.board[point+offset] == O and self.board[point+(offset*2)] == O and self.board[point+(offset*3)] == color:
+                    self.board[point+offset] = EMPTY
+                    self.board[point+(offset*2)] = EMPTY
+                    if color == BLACK:
+                        self.black_captures += 2
+                    else:
+                        self.white_captures += 2
  
             #self.play_move(move, player_color)
-            if player_color == WHITE and self.white_captures == 2:
-                    captured_moves.append(move)
-                    self.white_captures -= 2
-            if player_color == BLACK and self.black_captures == 2:
-                    captured_moves.append(move)
-                    self.black_captures -= 2
-            self.board[move] = EMPTY #resets the board 
-        return captured_moves
+            # if player_color == WHITE and self.white_captures == 2:
+            #         captured_moves.append(move)
+            #         self.white_captures -= 2
+            # if player_color == BLACK and self.black_captures == 2:
+            #         captured_moves.append(move)
+            #         self.black_captures -= 2
+                self.board[move] = EMPTY #resets the board 
+            return captured_moves
 
     def Random(self):
         legal_moves = self.get_empty_points()
