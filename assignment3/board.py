@@ -423,7 +423,7 @@ class GoBoard(object):
         return winPoints
 
 
-    def Capture (self):
+    def Capture (self, point: GO_POINT, color: GO_COLOR) -> bool:
         captured_moves = []
         legal_moves = self.get_empty_points()#all the empty points are legal moves
         player_color = self.current_player
