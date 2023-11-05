@@ -427,6 +427,13 @@ class GoBoard(object):
         captured_moves = []
         legal_moves = self.get_empty_points()#all the empty points are legal moves
         player_color = self.current_player
+        if self.board[point] != EMPTY:
+            return False
+        self.board[point] = color
+        self.current_player = opponent(color)
+        self.last2_move = self.last_move
+        self.last_move = point
+        O = opponent(color)
         
         for move in legal_moves:
             self.play_move(move, player_color)
