@@ -447,7 +447,7 @@ class GoBoard(object):
 
     def Capture(self):
         captured_moves = []
-        legal_moves = self.get_empty_points
+        legal_moves = self.get_empty_points()
         player_color = self.current_player
         
         for move in legal_moves:
@@ -462,7 +462,7 @@ class GoBoard(object):
             if player_color == BLACK and self.black_captures >= 2:
                 if len(self.black_captures) >= 2:
                     captured_moves.append(move)
-                    
+
             self.board[move] = EMPTY
         return captured_moves
             
