@@ -417,11 +417,11 @@ class GtpConnection:
         #     return ["OpenFour",rlist]
         board_copy = copy.deepcopy(self.board)
         #checks for captures
-        rlist = self.board.Capture()
+        rlist = board_copy.Capture()
         if len(rlist) != 0:
             moves = self.format_moves(rlist)
             return ["Capture",moves]
-        board_copy = copy.deepcopy(self.board)
+        #board_copy = copy.deepcopy(self.board)
         # rlist = self.board.Random()
         # if len(rlist) != 0:
         #     self.format_moves(rlist)
