@@ -465,28 +465,40 @@ class GoBoard(object):
                     self.white_captures += 2
         return True
 
-
     def Capture(self):
         captured_moves = []
         legal_moves = self.get_empty_points()
         player_color = self.current_player
         
         for move in legal_moves:
-            self.play_move(move, player_color)
-            color = self.detect_two_in_a_row()
-            if color == player_color:
+            if self.check_pattern(move, player_color):
                 captured_moves.append(move)
-            
-            if player_color == WHITE and self.white_captures >= 2:
-                if self.check_pattern(point, color):
-                    captured_moves.append(move)
-            if player_color == BLACK and self.black_captures >= 2:
-                if self.check_pattern(point, color):
-                    captured_moves.append(move)
-           
 
             self.board[move] = EMPTY
         return captured_moves
+
+
+    # def Capture(self):
+    #     captured_moves = []
+    #     legal_moves = self.get_empty_points()
+    #     player_color = self.current_player
+        
+    #     for move in legal_moves:
+    #         self.play_move(move, player_color)
+    #         color = self.detect_two_in_a_row()
+    #         if color == player_color:
+    #             captured_moves.append(move)
+            
+    #         if player_color == WHITE and self.white_captures >= 2:
+    #             if self.check_pattern():
+    #                 captured_moves.append(move)
+    #         if player_color == BLACK and self.black_captures >= 2:
+    #             if self.check_pattern():
+    #                 captured_moves.append(move)
+           
+
+    #         self.board[move] = EMPTY
+    #     return captured_moves
             
             
 
