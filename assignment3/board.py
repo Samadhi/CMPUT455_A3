@@ -428,8 +428,8 @@ class GoBoard(object):
             return False
         self.board[point] = color
         self.current_player = opponent(color)
-        self.last2_move = self.last_move
-        self.last_move = point
+        #self.last2_move = self.last_move
+        #self.last_move = point
         O = opponent(color)
         offsets = [1, -1, self.NS, -self.NS, self.NS+1, -(self.NS+1), self.NS-1, -self.NS+1]
         for offset in offsets:
@@ -456,10 +456,10 @@ class GoBoard(object):
             
             if player_color == WHITE and self.white_captures >= 2:
                 captured_moves.append(move)
-                return self.white_captures
+                self.white_captures += 2
             if player_color == BLACK and self.black_captures >= 2:
                 captured_moves.append(move)
-                return self.black_captures
+                self.black_captures += 2
            
 
             self.board[move] = EMPTY
