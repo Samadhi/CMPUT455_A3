@@ -475,7 +475,7 @@ class GoBoard(object):
             self.play_move(move, player_color)
             color = self.detect_two_in_a_row()
             if color == player_color:
-            #     captured_moves.append(move)
+                captured_moves.append(move)
             
             if player_color == WHITE and self.white_captures >= 2:
                 if self.check_pattern(point, color):
