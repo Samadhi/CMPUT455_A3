@@ -437,9 +437,9 @@ class GoBoard(object):
                 self.board[point+offset] = EMPTY
                 self.board[point+(offset*2)] = EMPTY
                 if color == BLACK:
-                    self.black_captures += 2
+                    self.black_captures += 0
                 else:
-                    self.white_captures += 2
+                    self.white_captures += 0
         return True
 
     
