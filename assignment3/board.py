@@ -465,6 +465,17 @@ class GoBoard(object):
                     self.white_captures += 2
         return True
 
+    def _detect_and_process_capture2(self, nb_point: GO_POINT) -> GO_POINT:
+        
+        single_capture: GO_POINT = NO_POINT
+        opp_block = self._block_of(nb_point)
+        if not self._has_liberty(opp_block):
+            captures = list(where1d(opp_block))
+            self.board[captures] = EMPTY
+            if len(captures) == 2:
+                single_capture = nb_point
+        return single_capture
+
     def Capture(self):
         captured_moves = []
         legal_moves = self.get_empty_points()
@@ -472,12 +483,17 @@ class GoBoard(object):
         
         for move in legal_moves:
             self.play_move(move, player_color)
-            color = self.detect_two_in_a_row()
-            if color == player_color:
-                if self.check_pattern(move, player_color):
-                    captured_moves.append(move)
+            captured = self._detect_and_process_capture2(move)
+            if len(captured) >= 2:
+                captured_moves.append(move)
+            # color = self.detect_two_in_a_row()
+            # if color == player_color:
+            #     if self.check_pattern(move, player_color):
+            #         captured_moves.append(move)
 
             self.board[move] = EMPTY
+            self.current_player = opponent(player_color)
+
         return captured_moves
 
 
