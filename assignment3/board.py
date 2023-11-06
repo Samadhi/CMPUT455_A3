@@ -452,15 +452,17 @@ class GoBoard(object):
         
         for move in legal_moves:
             self.play_move(move, player_color)
-            color = self.detect_two_in_a_row()
-            if color == player_color:
-                captured_moves.append(move)
+            # color = self.detect_two_in_a_row()
+            # if color == player_color:
+            #     captured_moves.append(move)
             
             if player_color == WHITE and self.white_captures >= 2:
-                if len(self.white_captures) >= 2:
+                capture_moves = self.detect_two_in_a_row(player_color)
+                if move in capture_moves:
                     captured_moves.append(move)
             if player_color == BLACK and self.black_captures >= 2:
-                if len(self.black_captures) >= 2:
+                capture_moves = self.detect_two_in_a_row(player_color)
+                if move in capture_moves:
                     captured_moves.append(move)
 
             self.board[move] = EMPTY
