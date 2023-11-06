@@ -466,17 +466,17 @@ class GoBoard(object):
         return True
 
     def _detect_and_process_capture2(self, move):
-    captured = set()
-    nb_points = self._neighbors(move)
+        captured = set()
+        nb_points = self._neighbors(move)
     
-    for nb_point in nb_points:
-        opp_block = self._block_of(nb_point)
-        if not self._has_liberty(opp_block):
-            captures = list(self.where1d(opp_block))
-            self.board[captures] = EMPTY
-            captured.update(captures)
+        for nb_point in nb_points:
+            opp_block = self._block_of(nb_point)
+            if not self._has_liberty(opp_block):
+                captures = list(self.where1d(opp_block))
+                self.board[captures] = EMPTY
+                captured.update(captures)
 
-    return captured
+        return captured
 
     def Capture(self):
         captured_moves = []
