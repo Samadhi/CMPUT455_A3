@@ -455,10 +455,10 @@ class GoBoard(object):
                 captured_moves.append(move)
             
             if player_color == WHITE and self.white_captures >= 2:
-                if self.check_pattern(point, color):
+                if self.check_pattern(point: GO_POINT, color: GO_COLOR):
                     captured_moves.append(move)
             if player_color == BLACK and self.black_captures >= 2:
-                if self.check_pattern():
+                if self.check_pattern(point: GO_POINT, color: GO_COLOR):
                     captured_moves.append(move)
            
 
