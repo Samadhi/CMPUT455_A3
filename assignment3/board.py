@@ -422,29 +422,6 @@ class GoBoard(object):
 
         return winPoints
 
-
-    # def Capture (self):
-    #     captured_moves = []
-    #     legal_moves = self.get_empty_points()#all the empty points are legal moves
-    #     player_color = self.current_player
-        
-    #     for move in legal_moves:
-    #         self.play_move(move, player_color)
-    #         color = self.detect_two_in_a_row()
-    #         if color == player_color:
-    #             captured_moves.append(move)
- 
-    #         #self.play_move(move, player_color)
-    #         if player_color == WHITE and self.white_captures >= 2:
-    #             captured_moves.append(move)
-    #             self.white_captures -= 2
-    #         if player_color == BLACK and self.black_captures >= 2:
-    #             captured_moves.append(move)
-    #             self.black_captures -= 2
-
-    #         self.board[move] = EMPTY #resets the board 
-    #     return captured_moves
-
     
     def check_pattern(self,  point: GO_POINT, color: GO_COLOR) -> bool:
         if self.board[point] != EMPTY:
@@ -465,67 +442,30 @@ class GoBoard(object):
                     self.white_captures += 2
         return True
 
-    def _detect_and_process_capture2(self, move):
-        captured = set()
-        nb_points = self._neighbors(move)
     
-        for nb_point in nb_points:
-            opp_block = self._block_of(nb_point)
-            if not self._has_liberty(opp_block):
-                captures = list(self.where1d(opp_block))
-                self.board[captures] = EMPTY
-                captured.update(captures)
-
-        return captured
-
-    def Capture(self):
-        captured_moves = []
-        legal_moves = self.get_empty_points()
-        player_color = self.current_player
+     def Capture(self):
+         captured_moves = []
+         legal_moves = self.get_empty_points()
+         player_color = self.current_player
         
-        for move in legal_moves:
-            self.play_move(move, player_color)
-            captured = self._detect_and_process_capture2(move)
-            if len(captured) >= 2:
-                captured_moves.append(move)
-            # color = self.detect_two_in_a_row()
-            # if color == player_color:
-            #     if self.check_pattern(move, player_color):
-            #         captured_moves.append(move)
-
-            self.board[move] = EMPTY
-            self.current_player = opponent(player_color)
-
-        return captured_moves
-
-
-    # def Capture(self):
-    #     captured_moves = []
-    #     legal_moves = self.get_empty_points()
-    #     player_color = self.current_player
-        
-    #     for move in legal_moves:
-    #         self.play_move(move, player_color)
-    #         color = self.detect_two_in_a_row()
-    #         if color == player_color:
-    #             captured_moves.append(move)
+         for move in legal_moves:
+             self.play_move(move, player_color)
+             color = self.detect_two_in_a_row()
+             if color == player_color:
+                 captured_moves.append(move)
             
-    #         if player_color == WHITE and self.white_captures >= 2:
-    #             if self.check_pattern():
-    #                 captured_moves.append(move)
-    #         if player_color == BLACK and self.black_captures >= 2:
-    #             if self.check_pattern():
-    #                 captured_moves.append(move)
+             if player_color == WHITE and self.white_captures >= 2:
+                 if self.check_pattern():
+                     captured_moves.append(move)
+             if player_color == BLACK and self.black_captures >= 2:
+                 if self.check_pattern():
+                     captured_moves.append(move)
            
 
-    #         self.board[move] = EMPTY
-    #     return captured_moves
+             self.board[move] = EMPTY
+         return captured_moves
             
             
-
-    
-
-
     def Random(self):
         legal_moves = self.get_empty_points()
         return legal_moves
