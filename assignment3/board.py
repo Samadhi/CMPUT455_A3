@@ -430,7 +430,7 @@ class GoBoard(object):
         
         for move in legal_moves:
             self.play_move(move, player_color)
-            color = self.detect_two_in_a_row()
+            color = self.detect_five_in_a_row()
             if color == player_color:
                 if self.play_move(move,color):
                     captured_moves.append(move)
@@ -490,7 +490,7 @@ class GoBoard(object):
 
     def detect_two_in_a_row(self) -> GO_COLOR:
         """
-        Returns BLACK or WHITE if any five in a row is detected for the color
+        Returns BLACK or WHITE if any 2 in a row is detected for the color
         EMPTY otherwise.
         """
         for r in self.rows:
