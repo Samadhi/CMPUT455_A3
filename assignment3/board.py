@@ -434,10 +434,6 @@ class GoBoard(object):
             if color == player_color:
                 if self.play_move(move,color):
                     captured_moves.append(move)
-                elif self._diag_neighbors(move):
-                    captured_moves.append(move)
-                elif self._neighbors(move):
-                    captured_moves.append(move) 
             
             if player_color == WHITE and self.white_captures >= 2:
                 captured_moves.append(move)
@@ -488,7 +484,7 @@ class GoBoard(object):
             else:
                 counter = 1
                 prev = self.get_color(stone)
-            if counter == 5 and prev != EMPTY:
+            if counter == 10 and prev != EMPTY:
                 return prev
         return EMPTY
 
