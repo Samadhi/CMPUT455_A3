@@ -438,8 +438,8 @@ class GoBoard(object):
                 previous_captures = self.white_captures
             else:
                 previous_captures = self.black_captures
-                print("black_captures {}".format(self.black_captures))
-                print("previous_captures {}". format(self.black_captures))
+                #print("black_captures {}".format(self.black_captures))
+                #print("previous_captures {}". format(self.black_captures))
                 
             self.play_move(move,player_color)
             print("new_black_captures {}".format(self.black_captures))
