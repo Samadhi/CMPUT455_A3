@@ -333,9 +333,9 @@ class GoBoard(object):
                 self.board[point+offset] = EMPTY
                 self.board[point+(offset*2)] = EMPTY
                 if color == BLACK:
-                    self.black_captures -= 2
+                    self.black_captures += 1
                 else:
-                    self.white_captures -= 2
+                    self.white_captures += 1
         return True
     
     def neighbors_of_color(self, point: GO_POINT, color: GO_COLOR) -> List:
