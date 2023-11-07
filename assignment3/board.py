@@ -450,7 +450,7 @@ class GoBoard(object):
                 captured_moves.append(move)
                 self.white_captures -= 2
             if player_color == BLACK and previous_captures < self.black_captures:
-                print('black')
+                print('bblack')
                 captured_moves.append(move)
                 self.black_captures -= 2
 
