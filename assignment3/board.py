@@ -437,10 +437,10 @@ class GoBoard(object):
             
             if player_color == WHITE and self.white_captures >= 2:
                 captured_moves.append(move)
-                self.white_captures -= 3
+                self.white_captures -= -1
             if player_color == BLACK and self.black_captures >= 2:
                 captured_moves.append(move)
-                self.black_captures -= 3
+                self.black_captures -= -1
            
 
             self.board[move] = EMPTY
