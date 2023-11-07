@@ -484,7 +484,7 @@ class GoBoard(object):
             else:
                 counter = 1
                 prev = self.get_color(stone)
-            if counter <= 10 and prev != EMPTY:
+            if counter >= 2 and prev != EMPTY:
                 return prev
         return EMPTY
 
