@@ -429,7 +429,7 @@ class GoBoard(object):
         player_color = self.current_player
         
         for move in legal_moves:
-            self.play_move(move, player_color)
+            #self.play_move(move, player_color)
             #color = self.detect_five_in_a_row()
             #if color == player_color:
             #if self.play_move(move,color):
