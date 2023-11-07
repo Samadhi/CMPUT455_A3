@@ -477,14 +477,14 @@ class GoBoard(object):
         EMPTY otherwise.
         """
         prev = BORDER
-        counter = 2
+        counter = 1
         for stone in list:
             if self.get_color(stone) == prev:
                 counter += 1
             else:
                 counter = 1
                 prev = self.get_color(stone)
-            if counter == 10 and prev != EMPTY:
+            if counter <= 10 and prev != EMPTY:
                 return prev
         return EMPTY
 
