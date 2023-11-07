@@ -439,7 +439,7 @@ class GoBoard(object):
             else:
                 previous_captures = self.white_captures
             
-            self.play_move(move,color)
+            self.play_move(move,player_color)
 
             
             if previous_captures >= 2:
