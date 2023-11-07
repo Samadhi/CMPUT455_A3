@@ -333,9 +333,9 @@ class GoBoard(object):
                 self.board[point+offset] = EMPTY
                 self.board[point+(offset*2)] = EMPTY
                 if color == BLACK:
-                    self.black_captures += 2
+                    self.black_captures -= 2
                 else:
-                    self.white_captures += 2
+                    self.white_captures -= 2
         return True
     
     def neighbors_of_color(self, point: GO_POINT, color: GO_COLOR) -> List:
@@ -437,10 +437,10 @@ class GoBoard(object):
             
             if player_color == WHITE and self.white_captures >= 2:
                 captured_moves.append(move)
-                self.white_captures -= 5
+                self.white_captures -= 2
             if player_color == BLACK and self.black_captures >= 2:
                 captured_moves.append(move)
-                self.black_captures -= 5
+                self.black_captures -= 2
            
 
             self.board[move] = EMPTY
