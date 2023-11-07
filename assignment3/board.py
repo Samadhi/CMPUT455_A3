@@ -428,6 +428,7 @@ class GoBoard(object):
         captured_moves = []
         legal_moves = self.get_empty_points()
         player_color = self.current_player
+        print(legal_moves)
         
         for move in legal_moves:
             #self.play_move(move, player_color)
