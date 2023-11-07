@@ -477,7 +477,7 @@ class GoBoard(object):
         EMPTY otherwise.
         """
         prev = BORDER
-        counter = 1
+        counter = 2
         for stone in list:
             if self.get_color(stone) == prev:
                 counter += 1
