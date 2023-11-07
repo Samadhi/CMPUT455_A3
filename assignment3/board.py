@@ -430,19 +430,28 @@ class GoBoard(object):
         
         for move in legal_moves:
             self.play_move(move, player_color)
-            color = self.detect_five_in_a_row()
-            if color == player_color:
-                if self.play_move(move,color):
-                    captured_moves.append(move)
+            #color = self.detect_five_in_a_row()
+            #if color == player_color:
+            #if self.play_move(move,color):
+                #captured_moves.append(move)
+            if self.current_player == WHITE:
+                previous_captures = self.black_captures
+            else:
+                previous_captures = self.white_captures
             
-            if player_color == WHITE and self.white_captures >= 2:
-                captured_moves.append(move)
-                self.white_captures -= 2
-            if player_color == BLACK and self.black_captures >= 2:
-                captured_moves.append(move)
-                self.black_captures -= 2
-           
-
+            if previous_captures >= 2:
+                if self.current_player == WHITE and previous_captures < self.black_captures:
+                    captured_moves.append(move)
+                    self.black_captures -= 2
+                elif self.current_player == BLACK and previous_captures < self.white_captures:
+                    captured_moves.append(move)
+                    self.white_captures -= 2
+                #if player_color == WHITE and self.white_captures >= 2:
+                    #captured_moves.append(move)
+                    #self.white_captures -= 2
+               # if player_color == BLACK and self.black_captures >= 2:
+                    #captured_moves.append(move)
+                    #self.black_captures -= 2
             self.board[move] = EMPTY
         return captured_moves
             
@@ -484,7 +493,7 @@ class GoBoard(object):
             else:
                 counter = 1
                 prev = self.get_color(stone)
-            if counter = 2 and counter < 10 and prev != EMPTY:
+            if counter == 5  and prev != EMPTY:
                 return prev
         return EMPTY
 
