@@ -421,10 +421,53 @@ class GoBoard(object):
             self.board[point] = EMPTY
 
         return winPoints
-        
+    
+    def OpenFour(self):
+        open_four_moves = []
+        legal_moves = self.get_empty_points()
+        player_color = self.current_player
+        # check in each row, col, and diagonal if there is 4 in a list
+        for move in legal_moves:
+            self.play_move(move, player_color)
+            color = self.detect_four_in_a_row()
+            if color == player_color:
+                open_four_moves.append(move)
+            self.board[move] = EMPTY
+
+        return open_four_moves
+    
     def Random(self):
         legal_moves = self.get_empty_points()
         return legal_moves
+    
+    def detect_four_in_a_row(self) -> GO_COLOR:
+    
+        for r in self.rows:
+            result = self.has_four_in_list(r)
+            if result != EMPTY:
+                return result
+        for c in self.cols:
+            result = self.has_four_in_list(c)
+            if result != EMPTY:
+                return result
+        for d in self.diags:
+            result = self.has_four_in_list(d)
+            if result != EMPTY:
+                return result
+        return EMPTY
+
+    def has_four_in_list(self, list) -> GO_COLOR:
+        prev = BORDER
+        counter = 1
+        for stone in list:
+            if self.get_color(stone) == prev:
+                counter += 1
+            else:
+                counter = 1
+                prev = self.get_color(stone)
+            if counter == 4 and prev != EMPTY:
+                return prev
+        return EMPTY
 
     def detect_five_in_a_row(self) -> GO_COLOR:
         """

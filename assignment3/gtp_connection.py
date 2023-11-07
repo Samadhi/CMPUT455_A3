@@ -409,12 +409,14 @@ class GtpConnection:
         rlist = board_copy.BlockWin()
         if len(rlist) != 0:
             moves = self.format_moves(rlist)
+
             return ["BlockWin",moves]
-        # board_copy = copy.deepcopy(self.board)
-        # rlist = self.board.OpenFour()
-        # if len(rlist) != 0:
-        #     self.format_moves(rlist)
-        #     return ["OpenFour",rlist]
+        # checks for open 4
+        board_copy = copy.deepcopy(self.board)
+        rlist = self.board.OpenFour()
+        if len(rlist) != 0:
+            moves = self.format_moves(rlist)
+            return ["OpenFour",moves]
         # board_copy = copy.deepcopy(self.board)
         # rlist = self.board.Capture()
         # if len(rlist) != 0:
@@ -430,6 +432,33 @@ class GtpConnection:
         """ 
         Modify this function for Assignment 2.
         """
+        moves_list = None
+        board_color = args[0].lower()
+        color = color_to_int(board_color)
+        result1 = self.board.detect_five_in_a_row()
+        result2 = EMPTY
+        if self.board.get_captures(opponent(color)) >= 10:
+            result2 = opponent(color)
+        if result1 == opponent(color) or result2 == opponent(color):
+            self.respond("resign")
+            return
+        legal_moves = self.board.get_empty_points()
+        if legal_moves.size == 0:
+            self.respond("pass")
+            return
+        
+        # choses best move
+        if (self.policytype == "random"):
+            moves = self.board.Random()
+            formated_moves = self.format_moves(moves)
+            self.play_cmd([board_color, formated_moves[0]+formated_moves[1], 'print_move'])
+        else:
+            rlist = self.rule_based()
+            moves = rlist[1]
+            moves_to_play = moves[0]+moves[1]
+            self.play_cmd([board_color, moves_to_play, 'print_move'])
+
+        """"
         board_color = args[0].lower()
         color = color_to_int(board_color)
         result1 = self.board.detect_five_in_a_row()
@@ -449,6 +478,7 @@ class GtpConnection:
         move_coord = point_to_coord(move, self.board.size)
         move_as_string = format_point(move_coord)
         self.play_cmd([board_color, move_as_string, 'print_move'])
+    """
 
     """
     ==========================================================================
