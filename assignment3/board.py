@@ -434,10 +434,10 @@ class GoBoard(object):
             if color == player_color:
                 if self.play_move(move,color):
                     captured_moves.append(move)
-                    if self._diag_neighbors(move):
-                        captured_moves.append(move)
-                        if self._neighbors(move):
-                            captured_moves.append(move) 
+                elif self._diag_neighbors(move):
+                    captured_moves.append(move)
+                elif self._neighbors(move):
+                    captured_moves.append(move) 
             
             if player_color == WHITE and self.white_captures >= 2:
                 captured_moves.append(move)
