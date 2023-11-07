@@ -439,6 +439,9 @@ class GoBoard(object):
             else:
                 previous_captures = self.white_captures
             
+            self.play_move(move,color)
+
+            
             if previous_captures >= 2:
                 if self.current_player == WHITE and previous_captures < self.black_captures:
                     captured_moves.append(move)
