@@ -325,15 +325,18 @@ class GoBoard(object):
         self.board[point] = color
         self.current_player = opponent(color)
         self.last2_move = self.last_move
+        print("play_move {}".format(point))
         self.last_move = point
         O = opponent(color)
         offsets = [1, -1, self.NS, -self.NS, self.NS+1, -(self.NS+1), self.NS-1, -self.NS+1]
         for offset in offsets:
             if self.board[point+offset] == O and self.board[point+(offset*2)] == O and self.board[point+(offset*3)] == color:
+                print('something')
                 self.board[point+offset] = EMPTY
                 self.board[point+(offset*2)] = EMPTY
                 if color == BLACK:
-                    print('bb')
+                    #print('bb')
+                    #print(point)
                     self.black_captures += 2
                 else:
                     self.white_captures += 2
@@ -429,6 +432,7 @@ class GoBoard(object):
         legal_moves = self.get_empty_points()
         player_color = self.current_player#doubt = when we were playing it. it was alternating players with only self.current player, so shoudld it do that or it should be consistent??
         #print(legal_moves)
+
         
         for move in legal_moves:#to play a move
             #self.play_move(move, player_color)
@@ -451,9 +455,8 @@ class GoBoard(object):
                 captured_moves.append(move)
                 self.white_captures -= 2 #resetting the white captures to its original state 
             if player_color == BLACK and previous_captures < self.black_captures:
-                print('bblack')
                 captured_moves.append(move)
-                self.black_captures -= 2
+                self.white_captures -= 2
 
                 #if player_color == WHITE and self.white_captures >= 2:
                     #captured_moves.append(move)
