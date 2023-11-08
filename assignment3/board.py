@@ -447,6 +447,7 @@ class GoBoard(object):
                 #print("black_captures {}".format(self.black_captures))
                 #print("previous_captures {}". format(self.black_captures))
             board_copy = self.board.copy()
+        
             self.play_move(move,player_color)
             #print("new_black_captures {}".format(self.black_captures))
 
