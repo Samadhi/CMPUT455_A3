@@ -325,13 +325,13 @@ class GoBoard(object):
         self.board[point] = color
         self.current_player = opponent(color)
         self.last2_move = self.last_move
-        print("play_move {}".format(point))
+        #print("play_move {}".format(point))
         self.last_move = point
         O = opponent(color)
         offsets = [1, -1, self.NS, -self.NS, self.NS+1, -(self.NS+1), self.NS-1, -self.NS+1]
         for offset in offsets:
             if self.board[point+offset] == O and self.board[point+(offset*2)] == O and self.board[point+(offset*3)] == color:
-                print('something')
+                #print('something')
                 self.board[point+offset] = EMPTY
                 self.board[point+(offset*2)] = EMPTY
                 if color == BLACK:
