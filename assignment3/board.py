@@ -436,6 +436,7 @@ class GoBoard(object):
             color = self.detect_four_in_a_row()
             if color == player_color:
                 open_four_moves.append(move)
+            #print()
             self.board[move] = EMPTY
 
         return open_four_moves
@@ -445,22 +446,14 @@ class GoBoard(object):
     def Capture(self):
         captured_moves = []
         legal_moves = self.get_empty_points()
-        player_color = self.current_player#doubt = when we were playing it. it was alternating players with only self.current player, so shoudld it do that or it should be consistent??
-        #print(legal_moves)
-
+        player_color = self.current_player
         
         for move in legal_moves:#to play a move
-            #self.play_move(move, player_color)
-            #color = self.detect_five_in_a_row()
-            #if color == player_color:
-            #if self.play_move(move,color):
-                #captured_moves.append(move)
             if player_color == WHITE:#previous_captures is tehre so we can chcek stuff later on depending on the player 
                 previous_captures = self.white_captures
             else:
                 previous_captures = self.black_captures
-                #print("black_captures {}".format(self.black_captures))
-                #print("previous_captures {}". format(self.black_captures))
+                
             board_copy = self.board.copy()
         
             self.play_move(move,player_color)
@@ -474,13 +467,6 @@ class GoBoard(object):
                 captured_moves.append(move)
                 self.white_captures -= 2
 
-                #if player_color == WHITE and self.white_captures >= 2:
-                    #captured_moves.append(move)
-                    #self.white_captures -= 2
-               # if player_color == BLACK and self.black_captures >= 2:
-                    #captured_moves.append(move)
-                    #self.black_captures -= 2
-            #self.board[move] = EMPTY#resetting the board before playing another move
             self.board = board_copy 
         return captured_moves
             

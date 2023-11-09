@@ -408,7 +408,7 @@ class GtpConnection:
             return ["BlockWin",moves]
         # checks for open 4
         board_copy = copy.deepcopy(self.board)
-        rlist = self.board.OpenFour()
+        rlist = board_copy.OpenFour()
         if len(rlist) != 0:
             moves = self.format_moves(rlist)
             return ["OpenFour",moves]
@@ -452,6 +452,7 @@ class GtpConnection:
         else:
             rlist = self.rule_based()
             moves = rlist[1]
+            print(moves)
             moves_to_play = moves[0]+moves[1]
             self.play_cmd([board_color, moves_to_play, 'print_move'])
 
