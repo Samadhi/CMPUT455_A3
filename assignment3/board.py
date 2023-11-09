@@ -325,18 +325,14 @@ class GoBoard(object):
         self.board[point] = color
         self.current_player = opponent(color)
         self.last2_move = self.last_move
-        #print("play_move {}".format(point))
         self.last_move = point
         O = opponent(color)
         offsets = [1, -1, self.NS, -self.NS, self.NS+1, -(self.NS+1), self.NS-1, -self.NS+1]
         for offset in offsets:
             if self.board[point+offset] == O and self.board[point+(offset*2)] == O and self.board[point+(offset*3)] == color:
-                #print('something')
                 self.board[point+offset] = EMPTY
                 self.board[point+(offset*2)] = EMPTY
                 if color == BLACK:
-                    #print('bb')
-                    #print(point)
                     self.black_captures += 2
                 else:
                     self.white_captures += 2
@@ -431,41 +427,25 @@ class GoBoard(object):
         captured_moves = []
         legal_moves = self.get_empty_points()
         player_color = self.current_player#doubt = when we were playing it. it was alternating players with only self.current player, so shoudld it do that or it should be consistent??
-        #print(legal_moves)
 
-        
         for move in legal_moves:#to play a move
-            #self.play_move(move, player_color)
-            #color = self.detect_five_in_a_row()
-            #if color == player_color:
-            #if self.play_move(move,color):
-                #captured_moves.append(move)
-            if player_color == WHITE:#previous_captures is tehre so we can chcek stuff later on depending on the player 
+            
+            if player_color == WHITE:#previous_captures is there so we can chcek stuff later on depending on the player 
                 previous_captures = self.white_captures
             else:
                 previous_captures = self.black_captures
-                #print("black_captures {}".format(self.black_captures))
-                #print("previous_captures {}". format(self.black_captures))
-            board_copy = self.board.copy()
         
+            board_copy = self.board.copy()#a copy of board is created before playing each move. move is played on the copy of the board and original board is restored after checking for captures.
             self.play_move(move,player_color)
-            #print("new_black_captures {}".format(self.black_captures))
 
-            if player_color == WHITE and previous_captures < self.white_captures:# should this be black_captures or white_captures??#we palyed a move and white captures would ahve more than previous captures if it captured something
-            #if we did capture in the move we played white shoudl be more  
+            if player_color == WHITE and previous_captures < self.white_captures:#we played a move and white captures would have more than previous captures if it captured something
+            #if we did capture in the move we played white should be more  
                 captured_moves.append(move)
                 self.white_captures -= 2 #resetting the white captures to its original state 
             if player_color == BLACK and previous_captures < self.black_captures:
                 captured_moves.append(move)
                 self.white_captures -= 2
 
-                #if player_color == WHITE and self.white_captures >= 2:
-                    #captured_moves.append(move)
-                    #self.white_captures -= 2
-               # if player_color == BLACK and self.black_captures >= 2:
-                    #captured_moves.append(move)
-                    #self.black_captures -= 2
-            #self.board[move] = EMPTY#resetting the board before playing another move
             self.board = board_copy 
         return captured_moves
             
