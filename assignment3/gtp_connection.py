@@ -363,7 +363,7 @@ class GtpConnection:
     Assignment 2 - game-specific commands you have to implement or modify
     ==========================================================================
     """
-    
+
     def policy_policytype_cmd(self,args: List[str]):
         p_type = ['random', 'rule_based']
     
@@ -393,11 +393,6 @@ class GtpConnection:
         return sorted_moves
 
     def rule_based(self):
-        # board_copy = copy.deepcopy(self.board)
-        # rlist = board_copy.Win()
-        # if len(rlist) != 0:
-        #     self.format_moves(rlist)
-        #     return ["Win",rlist]
         board_copy = copy.deepcopy(self.board)
         #checks for wins
         rlist = board_copy.Win()
@@ -417,12 +412,14 @@ class GtpConnection:
         if len(rlist) != 0:
             moves = self.format_moves(rlist)
             return ["OpenFour",moves]
-        # board_copy = copy.deepcopy(self.board)
-        # rlist = self.board.Capture()
-        # if len(rlist) != 0:
-        #     self.format_moves(rlist)
-        #     return ["Capture",rlist]
-        # board_copy = copy.deepcopy(self.board)
+        
+        board_copy = copy.deepcopy(self.board)
+        #checks for captures
+        rlist = board_copy.Capture()
+        if len(rlist) != 0:
+            moves = self.format_moves(rlist)
+            return ["Capture",moves]
+        #board_copy = copy.deepcopy(self.board)
         # rlist = self.board.Random()
         # if len(rlist) != 0:
         #     self.format_moves(rlist)
