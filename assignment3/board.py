@@ -325,18 +325,15 @@ class GoBoard(object):
         self.board[point] = color
         self.current_player = opponent(color)
         self.last2_move = self.last_move
-        #print("play_move {}".format(point))
         self.last_move = point
         O = opponent(color)
         offsets = [1, -1, self.NS, -self.NS, self.NS+1, -(self.NS+1), self.NS-1, -self.NS+1]
         for offset in offsets:
             if self.board[point+offset] == O and self.board[point+(offset*2)] == O and self.board[point+(offset*3)] == color:
-                print('something')
+                
                 self.board[point+offset] = EMPTY
                 self.board[point+(offset*2)] = EMPTY
                 if color == BLACK:
-                    #print('bb')
-                    #print(point)
                     self.black_captures += 2
                 else:
                     self.white_captures += 2
@@ -380,12 +377,14 @@ class GoBoard(object):
 
         for move in legal_moves:    
             # check for 5 in a row
+            board_copy = self.board.copy()
             self.play_move(move, player_color)
+            # check if we got a 5 in a row
             color = self.detect_five_in_a_row()
             if color == player_color:
                 winning_moves.append(move)
 
-            # check captures
+            # check if we captured
             if player_color == WHITE and self.white_captures >= 10:
                     winning_moves.append(move)
                     self.white_captures -= 2
@@ -393,46 +392,47 @@ class GoBoard(object):
                     winning_moves.append(move)
                     self.black_captures -= 2
 
-            # reset points filled back to empty
-            self.board[move] = EMPTY
+            # reset board to original
+            self.board = board_copy 
 
         return winning_moves
         
     def BlockWin(self):
         winPoints = []
         empty_points = self.get_empty_points()
+        player = self.current_player
 
         # check if there is a five in a row
         for point in empty_points:
-            if self.current_player == WHITE:
+            if player == WHITE:
                 previous_captures = self.white_captures
             else:
                 previous_captures = self.black_captures
 
             board_copy = self.board.copy()
             
-            self.play_move(point, opponent(self.current_player))
+            self.play_move(point, opponent(player))
+            # checks 5 in a row
             color = self.detect_five_in_a_row()
-
-            if color == opponent(self.current_player):
+            if color == opponent(player):
                 winPoints.append(point)
-
-            if self.current_player == WHITE and previous_captures < self.white_captures:
+            # checks if opponent will win with capturing
+            if opponent(player) == WHITE and self.white_captures>=10:
                 winPoints.append(point)
                 self.white_captures -= 2
-            elif self.current_player == BLACK and previous_captures < self.black_captures:
+            elif opponent(player) == BLACK and self.black_captures>=10:
                 winPoints.append(point)
                 self.black_captures -= 2
-            '''
-            if previous_captures == 8:
-                if self.current_player == WHITE and previous_captures < self.black_captures:
-                    winPoints.append(point)
-                    self.black_captures -= 2
-                elif self.current_player == BLACK and previous_captures < self.white_captures:
-                    winPoints.append(point)
-                    self.white_captures -= 2
-            '''
-            #self.board[point] = EMPTY
+            self.board[point] = EMPTY
+            # see if we can temporarily stop them from winning by capturing
+            self.play_move(point, player)
+            if player == WHITE and previous_captures < self.white_captures and len(winPoints)>0:
+                winPoints.append(point)
+                self.white_captures -= 2
+            elif player == BLACK and previous_captures < self.black_captures and len(winPoints)>0:
+                winPoints.append(point)
+                self.black_captures -= 2
+
             self.board = board_copy 
 
         return winPoints
@@ -448,7 +448,6 @@ class GoBoard(object):
             color = self.detect_four_in_a_row(move)
             if color == player_color:
                 open_four_moves.append(move)
-            #print()
             self.board[move] = EMPTY
             self.board = board_copy
 
@@ -470,7 +469,6 @@ class GoBoard(object):
             board_copy = self.board.copy()
         
             self.play_move(move,player_color)
-            #print("new_black_captures {}".format(self.black_captures))
 
             if player_color == WHITE and previous_captures < self.white_captures:# should this be black_captures or white_captures??#we palyed a move and white captures would ahve more than previous captures if it captured something
             #if we did capture in the move we played white shoudl be more  
@@ -508,27 +506,17 @@ class GoBoard(object):
         prev = BORDER
         counter = 1
         four_in_list = []
-        #print(list)
-        #print(move)
         for stone in list:
-            #if move == 34:
-                #print(prev)
             if self.get_color(stone) == prev and self.get_color(stone)!= EMPTY:
-                #print(self.get_color(stone)==prev)
-                #print(self.get_color(stone))
                 four_in_list.append(stone)
                 if len(four_in_list) == 3:
                     if self.get_color(stone-3) == self.get_color(stone):
                         four_in_list.append(stone-3)
-                # if move == 34:
-                #     print(four_in_list)
                 counter += 1
             else:
                 counter = 1
                 prev = self.get_color(stone)
-                #four_in_list = [stone-1]
             if counter == 4 and prev != EMPTY and move in four_in_list:
-                print(four_in_list)
                 return prev
         return EMPTY
 
