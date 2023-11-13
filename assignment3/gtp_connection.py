@@ -380,6 +380,7 @@ class GtpConnection:
             formated_moves = self.format_moves(moves)
             self.respond("Random "+formated_moves)
         else:
+            self.showboard_cmd(self.board)
             rlist = self.rule_based()
             self.respond("{} {}".format(rlist[0], rlist[1]))
 
@@ -410,6 +411,7 @@ class GtpConnection:
         board_copy = copy.deepcopy(self.board)
         rlist = board_copy.OpenFour()
         if len(rlist) != 0:
+            self.showboard_cmd(board_copy)
             moves = self.format_moves(rlist)
             return ["OpenFour",moves]
         
@@ -417,13 +419,15 @@ class GtpConnection:
         #checks for captures
         rlist = board_copy.Capture()
         if len(rlist) != 0:
+            self.showboard_cmd(board_copy)
             moves = self.format_moves(rlist)
             return ["Capture",moves]
-        #board_copy = copy.deepcopy(self.board)
-        # rlist = self.board.Random()
-        # if len(rlist) != 0:
-        #     self.format_moves(rlist)
-        #     return ["Random",rlist]
+        #returns random move
+        board_copy = copy.deepcopy(self.board)
+        rlist = self.board.Random()
+        if len(rlist) != 0:
+             self.format_moves(rlist)
+             return ["Random",rlist]
 
     def genmove_cmd(self, args: List[str]) -> None:
         """ 

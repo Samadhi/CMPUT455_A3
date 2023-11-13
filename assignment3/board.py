@@ -331,7 +331,7 @@ class GoBoard(object):
         offsets = [1, -1, self.NS, -self.NS, self.NS+1, -(self.NS+1), self.NS-1, -self.NS+1]
         for offset in offsets:
             if self.board[point+offset] == O and self.board[point+(offset*2)] == O and self.board[point+(offset*3)] == color:
-                #print('something')
+                print('something')
                 self.board[point+offset] = EMPTY
                 self.board[point+(offset*2)] = EMPTY
                 if color == BLACK:
@@ -405,16 +405,25 @@ class GoBoard(object):
         # check if there is a five in a row
         for point in empty_points:
             if self.current_player == WHITE:
-                previous_captures = self.black_captures
-            else:
                 previous_captures = self.white_captures
+            else:
+                previous_captures = self.black_captures
+
+            board_copy = self.board.copy()
             
             self.play_move(point, opponent(self.current_player))
             color = self.detect_five_in_a_row()
 
             if color == opponent(self.current_player):
                 winPoints.append(point)
-            
+
+            if self.current_player == WHITE and previous_captures < self.white_captures:
+                winPoints.append(point)
+                self.white_captures -= 2
+            elif self.current_player == BLACK and previous_captures < self.black_captures:
+                winPoints.append(point)
+                self.black_captures -= 2
+            '''
             if previous_captures == 8:
                 if self.current_player == WHITE and previous_captures < self.black_captures:
                     winPoints.append(point)
@@ -422,7 +431,9 @@ class GoBoard(object):
                 elif self.current_player == BLACK and previous_captures < self.white_captures:
                     winPoints.append(point)
                     self.white_captures -= 2
-            self.board[point] = EMPTY
+            '''
+            #self.board[point] = EMPTY
+            self.board = board_copy 
 
         return winPoints
     
@@ -432,12 +443,14 @@ class GoBoard(object):
         player_color = self.current_player
         # check in each row, col, and diagonal if there is 4 in a list
         for move in legal_moves:
+            board_copy = self.board.copy()
             self.play_move(move, player_color)
-            color = self.detect_four_in_a_row()
+            color = self.detect_four_in_a_row(move)
             if color == player_color:
                 open_four_moves.append(move)
             #print()
             self.board[move] = EMPTY
+            self.board = board_copy
 
         return open_four_moves
     
@@ -475,32 +488,47 @@ class GoBoard(object):
         legal_moves = self.get_empty_points()
         return legal_moves
     
-    def detect_four_in_a_row(self) -> GO_COLOR:
+    def detect_four_in_a_row(self, move) -> GO_COLOR:
     
         for r in self.rows:
-            result = self.has_four_in_list(r)
+            result = self.has_four_in_list(r, move)
             if result != EMPTY:
                 return result
         for c in self.cols:
-            result = self.has_four_in_list(c)
+            result = self.has_four_in_list(c, move)
             if result != EMPTY:
                 return result
         for d in self.diags:
-            result = self.has_four_in_list(d)
+            result = self.has_four_in_list(d, move)
             if result != EMPTY:
                 return result
         return EMPTY
 
-    def has_four_in_list(self, list) -> GO_COLOR:
+    def has_four_in_list(self, list, move) -> GO_COLOR:
         prev = BORDER
         counter = 1
+        four_in_list = []
+        #print(list)
+        #print(move)
         for stone in list:
-            if self.get_color(stone) == prev:
+            #if move == 34:
+                #print(prev)
+            if self.get_color(stone) == prev and self.get_color(stone)!= EMPTY:
+                #print(self.get_color(stone)==prev)
+                #print(self.get_color(stone))
+                four_in_list.append(stone)
+                if len(four_in_list) == 3:
+                    if self.get_color(stone-3) == self.get_color(stone):
+                        four_in_list.append(stone-3)
+                # if move == 34:
+                #     print(four_in_list)
                 counter += 1
             else:
                 counter = 1
                 prev = self.get_color(stone)
-            if counter == 4 and prev != EMPTY:
+                #four_in_list = [stone-1]
+            if counter == 4 and prev != EMPTY and move in four_in_list:
+                print(four_in_list)
                 return prev
         return EMPTY
 
