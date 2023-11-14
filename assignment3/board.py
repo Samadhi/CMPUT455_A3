@@ -447,13 +447,12 @@ class GoBoard(object):
             self.play_move(move, player_color)
             color = self.detect_four_in_a_row(move)
             if color == player_color:
+                print("color: ", color, " move: ", move)
                 open_four_moves.append(move)
             self.board[move] = EMPTY
             self.board = board_copy
 
         return open_four_moves
-    
-
     
     def Capture(self):
         captured_moves = []
@@ -491,14 +490,17 @@ class GoBoard(object):
         for r in self.rows:
             result = self.has_four_in_list(r, move)
             if result != EMPTY:
+                print("row: ", result)
                 return result
         for c in self.cols:
             result = self.has_four_in_list(c, move)
             if result != EMPTY:
+                print("col: ", result)
                 return result
         for d in self.diags:
             result = self.has_four_in_list(d, move)
             if result != EMPTY:
+                print("diag: ", result)
                 return result
         return EMPTY
 
@@ -506,18 +508,23 @@ class GoBoard(object):
         prev = BORDER
         counter = 1
         four_in_list = []
+        index = 0
         for stone in list:
             if self.get_color(stone) == prev and self.get_color(stone)!= EMPTY:
                 four_in_list.append(stone)
-                if len(four_in_list) == 3:
-                    if self.get_color(stone-3) == self.get_color(stone):
-                        four_in_list.append(stone-3)
+                if len(four_in_list) == 3 and index > 3:
+                    if self.get_color(list[index-4]) == EMPTY and self.get_color(list[index+1]) == EMPTY:
+                        four_in_list.append(list[index-3])
                 counter += 1
             else:
                 counter = 1
                 prev = self.get_color(stone)
-            if counter == 4 and prev != EMPTY and move in four_in_list:
+
+            if counter == 4 and prev != EMPTY and move in four_in_list and len(four_in_list) == 4:
+                print(counter, four_in_list)
+                print("here")
                 return prev
+            index += 1
         return EMPTY
 
     def detect_five_in_a_row(self) -> GO_COLOR:
@@ -593,24 +600,30 @@ class GoBoard(object):
                 return prev
         return EMPTY   
     
-    def simulateMoves(self): 
+    def simulateMoves(self, move):
+        
+        if move == 22:
+            print(self.end_of_game())
+
         allMoves = self.get_empty_points()
-
         #current implementation is random, will need to make the different kinds
-
         random.shuffle(allMoves)
-        i = 0
         while not self.end_of_game():
-            self.play_move(allMoves[i],opponent(self.current_player))
-            i+= 1
-            
-        result1 = self.detect_five_in_a_row()
+            self.play_move(allMoves[0],self.current_player)
+            self.current_player = opponent(self.current_player)
+            allMoves = self.get_empty_points()
+            random.shuffle(allMoves)
+        
 
+        result1 = self.detect_five_in_a_row()
         if self.get_captures(BLACK) >= 10 or result1 == BLACK:
+            print(1)
             return BLACK
         elif self.get_captures(WHITE) >= 10 or result1 == WHITE:
+            print(2)
             return WHITE
         elif self.get_empty_points().size == 0:
+            print(3)
             return EMPTY 
               
         

@@ -47,23 +47,22 @@ class SimulationPlayer(object):
         for i in range(numMoves):
             move = moves[i]
             score[i] = self.simulate(state, move)
-        #print("score: ",score)
         bestIndex = score.index(max(score))
         best = moves[bestIndex]
-        #print("Best move:", best, "score", score[bestIndex])
-        print("Not yet implemented for rules")
+        print(best, bestIndex, score)
         return best
 
     def simulate(self, state: GoBoard, move: GO_POINT):
         stats = [0] * 3
         state_copy = copy.deepcopy(state)
         state_copy.play_move(move, state.current_player)
-        # moveNr = state.moveNumber()
         for i in range(self.numSimulations):
-            winner= state_copy.simulateMoves()
+            winner = state_copy.simulateMoves(move)
             stats[winner] += 1
             state_copy = copy.deepcopy(state)
+        
         assert sum(stats) == self.numSimulations
+        print(move, stats)
         eval = (stats[BLACK] + 0.5 * stats[EMPTY]) / self.numSimulations
         if state.current_player == WHITE:
             eval = 1 - eval
