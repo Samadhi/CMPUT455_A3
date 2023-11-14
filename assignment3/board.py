@@ -447,7 +447,6 @@ class GoBoard(object):
             self.play_move(move, player_color)
             color = self.detect_four_in_a_row(move)
             if color == player_color:
-                print("color: ", color, " move: ", move)
                 open_four_moves.append(move)
             self.board[move] = EMPTY
             self.board = board_copy
@@ -490,17 +489,14 @@ class GoBoard(object):
         for r in self.rows:
             result = self.has_four_in_list(r, move)
             if result != EMPTY:
-                print("row: ", result)
                 return result
         for c in self.cols:
             result = self.has_four_in_list(c, move)
             if result != EMPTY:
-                print("col: ", result)
                 return result
         for d in self.diags:
             result = self.has_four_in_list(d, move)
             if result != EMPTY:
-                print("diag: ", result)
                 return result
         return EMPTY
 
@@ -521,8 +517,6 @@ class GoBoard(object):
                 prev = self.get_color(stone)
 
             if counter == 4 and prev != EMPTY and move in four_in_list and len(four_in_list) == 4:
-                print(counter, four_in_list)
-                print("here")
                 return prev
             index += 1
         return EMPTY
@@ -601,10 +595,6 @@ class GoBoard(object):
         return EMPTY   
     
     def simulateMoves(self, move):
-        
-        if move == 22:
-            print(self.end_of_game())
-
         allMoves = self.get_empty_points()
         #current implementation is random, will need to make the different kinds
         random.shuffle(allMoves)
@@ -613,17 +603,13 @@ class GoBoard(object):
             self.current_player = opponent(self.current_player)
             allMoves = self.get_empty_points()
             random.shuffle(allMoves)
-        
 
         result1 = self.detect_five_in_a_row()
         if self.get_captures(BLACK) >= 10 or result1 == BLACK:
-            print(1)
             return BLACK
         elif self.get_captures(WHITE) >= 10 or result1 == WHITE:
-            print(2)
             return WHITE
         elif self.get_empty_points().size == 0:
-            print(3)
             return EMPTY 
               
         

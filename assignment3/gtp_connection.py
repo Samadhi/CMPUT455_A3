@@ -389,7 +389,6 @@ class GtpConnection:
             coords: Tuple[int, int] = point_to_coord(move, self.board.size)
             gtp_moves.append((format_point(coords)).lower())
         sorted_moves = " ".join(sorted(gtp_moves))
-        #print(sorted_moves)
         return sorted_moves
 
     def rule_based(self):
@@ -397,35 +396,30 @@ class GtpConnection:
         #checks for wins
         rlist = board_copy.Win()
         if len(rlist) != 0:
-            print("win!")
             moves = self.format_moves(rlist)
             return ["Win",moves] 
         board_copy = copy.deepcopy(self.board)
         # checks for blocks wins
         rlist = board_copy.BlockWin()
         if len(rlist) != 0:
-            print("block win!")
             moves = self.format_moves(rlist)
             return ["BlockWin",moves]
         # checks for open 4
         board_copy = copy.deepcopy(self.board)
         rlist = board_copy.OpenFour()
         if len(rlist) != 0:
-            print("open four!")
             moves = self.format_moves(rlist)
             return ["OpenFour",moves]
         board_copy = copy.deepcopy(self.board)
         #checks for captures
         rlist = board_copy.Capture()
         if len(rlist) != 0:
-            print("capture!")
             moves = self.format_moves(rlist)
             return ["Capture",moves]
         #returns random move
         board_copy = copy.deepcopy(self.board)
         rlist = self.board.Random()
         if len(rlist) != 0:
-            print("random!")
             self.format_moves(rlist)
             return ["Random",rlist]
 
@@ -450,8 +444,6 @@ class GtpConnection:
         
         # choses best move
         if (self.policytype == "random"):
-            # print("random!")
-            # moves = self.board.Random()
             move = self.simulation.genmove(self.board)
             coords: Tuple[int, int] = point_to_coord(move, self.board.size)
             formated_move = (format_point(coords)).lower()
@@ -460,7 +452,6 @@ class GtpConnection:
             rlist = self.rule_based()
             moves = rlist[1]
             moves_to_play = moves[0]+moves[1]
-            print(moves_to_play)
             self.play_cmd([board_color, moves_to_play, 'print_move'])
 
 

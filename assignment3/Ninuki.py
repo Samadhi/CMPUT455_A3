@@ -49,7 +49,6 @@ class SimulationPlayer(object):
             score[i] = self.simulate(state, move)
         bestIndex = score.index(max(score))
         best = moves[bestIndex]
-        print(best, bestIndex, score)
         return best
 
     def simulate(self, state: GoBoard, move: GO_POINT):
@@ -62,7 +61,6 @@ class SimulationPlayer(object):
             state_copy = copy.deepcopy(state)
         
         assert sum(stats) == self.numSimulations
-        print(move, stats)
         eval = (stats[BLACK] + 0.5 * stats[EMPTY]) / self.numSimulations
         if state.current_player == WHITE:
             eval = 1 - eval
