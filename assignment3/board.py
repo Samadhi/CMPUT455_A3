@@ -422,7 +422,47 @@ class GoBoard(object):
 
         return winPoints
 
+    def OpenFour(self):
+        open_four_moves = []
+        legal_moves = self.get_empty_points()
+        player_color = self.current_player
+        # check in each row, col, and diagonal if there is 4 in a list
+        for move in legal_moves:
+            board_copy = self.board.copy()
+            self.play_move(move, player_color)
+            color = self.detect_four_in_a_row(move)
+            if color == player_color:
+                open_four_moves.append(move)
+            self.board[move] = EMPTY
+            self.board = board_copy
+
+        return open_four_moves
+    def DoubleOpenFour(self):
+        double_open_four_moves = []
+        legal_moves = self.get_empty_points()
+        player_color = self.current_player
+    # check in each row, col, and diagonal if there are two consecutive open fours
+        for move in legal_moves:
+            board_copy = self.board.copy()
+            self.play_move(move, player_color)
+            color = self.detect_four_in_a_row(move)
+        
+        # Check for the first open four
+            if color == player_color:
+            # If an open four is found, check for a second one after making the move
+                for second_move in legal_moves:
+                    if second_move != move:
+                        self.play_move(second_move, player_color)
+                        second_color = self.detect_four_in_a_row(second_move)
+                    # If a second open four is found, consider it a Double Open Four
+                        if second_color == player_color:
+                            double_open_four_moves.append((move, second_move))
+                        self.board[second_move] = EMPTY
+            self.board[move] = EMPTY
+            self.board = board_copy
     
+        return double_open_four_moves   
+        
     def Capture(self):
         captured_moves = []
         legal_moves = self.get_empty_points()
