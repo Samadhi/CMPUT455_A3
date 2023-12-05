@@ -410,22 +410,41 @@ class GtpConnection:
         if len(rlist) != 0:
             moves = self.format_moves(rlist)
             return ["BlockWin",moves]
-        # board_copy = copy.deepcopy(self.board)
-        # rlist = self.board.OpenFour()
-        # if len(rlist) != 0:
-        #     self.format_moves(rlist)
-        #     return ["OpenFour",rlist]
+        board_copy = copy.deepcopy(self.board)
+        #checks for open three
+        rlist = board_copy.OpenThree()
+        if len(rlist) != 0:
+            moves = self.format_moves(rlist)
+            return ["OpenThree",moves]
+        board_copy = copy.deepcopy(self.board)
+        #checks for double open three
+        rlist = board_copy.DoubleOpenThree()
+        if len(rlist) != 0:
+            moves = self.format_moves(rlist)
+            return ["DoubleOpenThree",moves]
+        board_copy = copy.deepcopy(self.board)
+        #checks for open four
+        rlist = self.board.OpenFour()
+        if len(rlist) != 0:
+            self.format_moves(rlist)
+            return ["OpenFour",rlist]
+        board_copy = copy.deepcopy(self.board)
+        #checks for double open four
+        rlist = self.board.DoubleOpenFour()
+        if len(rlist) != 0:
+            self.format_moves(rlist)
+            return ["DoubleOpenFour",rlist]
         board_copy = copy.deepcopy(self.board)
         #checks for captures
         rlist = board_copy.Capture()
         if len(rlist) != 0:
             moves = self.format_moves(rlist)
             return ["Capture",moves]
-        #board_copy = copy.deepcopy(self.board)
-        # rlist = self.board.Random()
-        # if len(rlist) != 0:
-        #     self.format_moves(rlist)
-        #     return ["Random",rlist]
+        board_copy = copy.deepcopy(self.board)
+        rlist = self.board.Random()
+        if len(rlist) != 0:
+            self.format_moves(rlist)
+            return ["Random",rlist]
 
     def genmove_cmd(self, args: List[str]) -> None:
         """ 
